@@ -1,0 +1,8 @@
+SELECT TOP (1000) [FieldId]
+      ,[FieldName]
+      ,[FieldType]
+      ,[IsRequired]
+      ,[ValidationRegex]
+      ,[FormID]
+      ,[Value]
+  FROM [DemoForms1].[dbo].[FrmFields]

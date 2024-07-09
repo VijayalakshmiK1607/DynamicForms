@@ -1,0 +1,57 @@
+﻿@page
+@model DemoForms.Pages.DForm.IndexModel
+@{
+}
+<h1>@Model.Forms.FormName</h1>
+<p>@Model.Forms.Description</p>
+
+<form asp-action="SubmitForm" method="post">
+    @Html.AntiForgeryToken() <!-- Add anti-forgery token -->
+    var message="";
+    @foreach (var field in @Model.Forms.FormFields)
+    {
+        <div class="form-group">
+            <label asp-for="(@field.FieldName)">@field.FieldName</label>
+            @if (field.FieldType == "text")
+            {
+
+                @if (field.IsRequired)
+                {
+                    <input name="@field.FieldName" id="@field.FieldName" type="text" class="line-input form-control" value="@field.Value" autocomplete="off"   required />
+                }
+                else
+                {
+               @*  <input asp-for="@field.FieldName" class="form-control" value="@field.Value"   /> *@
+                <input name="@field.FieldName" id="@field.FieldName" type="text" class="line-input form-control" value="@field.Value" autocomplete="off" />
+                }
+                }
+            else if (field.FieldType == "dropdown")
+            {
+                <select asp-for="@field.Value" class="form-control">
+                    <option value="">Select...</option>
+                    @foreach (var item in @field.Value.Split(","))
+                    {
+
+                        <option value="@item">
+                            @item
+                        </option>
+                    }
+                </select>
+            }
+            <!-- Add other field types (checkboxes, etc.) as needed -->
+              @if (field.IsRequired)
+              {
+                <span asp-validation-for="@field.FieldName" class="text-danger" ></span>
+              }
+          
+        </div>
+    }
+ <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
